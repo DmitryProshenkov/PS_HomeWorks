@@ -8,7 +8,7 @@
       ansible.builtin.copy:
         src: /etc/systemd/system/docker.service.d/
         dest: /etc/systemd/system/docker.service.d/
-        mode: '0660'
+        mode: '0644'
 
     - name: Перечитывание юнитов сервисов
       command: systemctl daemon-reload
