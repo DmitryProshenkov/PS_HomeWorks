@@ -1,7 +1,7 @@
 version: "1"
 services:
   postgre_test6:
-    image: postgres
+    image: postgres:latest
     restart: always
     volumes:
     - /home/duser/data:/data/pg  
