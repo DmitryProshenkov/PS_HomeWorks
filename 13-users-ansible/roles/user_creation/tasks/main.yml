@@ -1,0 +1,20 @@
+---
+# Пользовательские SSH-ключи создаются модулем user, модуль community.crypto.openssl немного для других целей.
+# Относительно добавлений публичных ключей в authorized_keys, не понял что-куда. Не так делается...
+#
+# Vault password: 13572468
+#
+- name: Создание пользователей
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password: "{{ initial_user_password | string | password_hash('sha512') }}"
+    groups: docker
+    generate_ssh_key: true
+    append: true
+    state: present
+  loop: "{{ lookup('file', 'user_list.yml').split('\n') }}"
+
+- name: Пометка пароля, как INITIAL
+  ansible.builtin.command: chage -d 0 "{{ item }}"
+  loop: "{{ lookup('file', 'user_list.yml').split('\n') }}"
+  changed_when: false
