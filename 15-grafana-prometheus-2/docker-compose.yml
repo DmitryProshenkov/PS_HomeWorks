@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: my_grafana
+    restart: always
+    volumes:
+    - ./15-grafana/main:/var/lib/grafana
+    - ./15-grafana/ds:/etc/grafana/datasources
+    - ./15-grafana/dash:/etc/grafana/dashboards
+    - ./15-grafana/plugins:/etc/grafana/plugins
+    networks:
+    - my-network2
+    ports:
+    - 3000:3000
+
+  prometheus:
+    image: prom/prometheus:main
+    container_name: my_prometheus
+    restart: always
+    volumes:
+    - ./15-prometheus/etc/prometheus:/etc/prometheus
+    - ./15-prometheus/prometheus:/prometheus
+    networks:
+    - my-network2
+    ports:
+    - 9090:9090
+
+  node_exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: my_node-exporter
+    restart: always
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    volumes:
+      - '/:/host:ro,rslave'    
+#    networks:
+#    - my-network2
+#    ports:
+#    - 9100:9100
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: my_cadvisor
+    restart: always
+    volumes:
+    - '/:/rootfs:ro'
+    - '/var/run:/var/run:ro'
+    - '/sys:/sys:ro'
+    - '/var/lib/docker/:/var/lib/docker:ro'
+    - '/dev/disk/:/dev/disk:ro'
+    networks:
+    - my-network2
+    ports:
+    - 8080:8080
+
+networks:
+  my-network2:
+    driver: overlay
+    attachable: true
