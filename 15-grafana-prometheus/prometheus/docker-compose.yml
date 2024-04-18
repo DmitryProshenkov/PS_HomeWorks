@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  prometheus:
+    image: bitnami/prometheus:2.51.2
+    restart: always
+    volumes:
+    - ./15-prometheus/etc/prometheus:/etc/prometheus
+    - ./15-prometheus/prometheus:/prometheus
+    networks:
+    - my-network2
+    ports:
+    - 9090:9090
+
+networks:
+  my-network2:
+    driver: overlay
+    attachable: true
