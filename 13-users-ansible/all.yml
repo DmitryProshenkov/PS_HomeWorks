@@ -1,0 +1,5 @@
+---
+- name: Configurations
+  hosts: demo
+  roles:
+    - user_creation

@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  grafana:
+    image: grafana/grafana:10.4.2
+    restart: always
+    volumes:
+    - ./15-grafana/main:/var/lib/grafana
+    - ./15-grafana/ds:/etc/grafana/datasources
+    - ./15-grafana/dash:/etc/grafana/dashboards
+    - ./15-grafana/plugins:/etc/grafana/plugins
+    networks:
+    - my-network2
+    ports:
+    - 3000:3000
+
+  prometheus:
+    image: prom/prometheus:main
+    restart: always
+    volumes:
+    - ./15-prometheus/etc/prometheus:/etc/prometheus
+    - ./15-prometheus/prometheus:/prometheus
+    networks:
+    - my-network2
+    ports:
+    - 9090:9090
+
+networks:
+  my-network2:
+    driver: overlay
+    attachable: true

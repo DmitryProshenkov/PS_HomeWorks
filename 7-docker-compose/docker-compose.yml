@@ -1,0 +1,17 @@
+version: "1"
+services:
+  postgre_test6:
+    image: postgres
+    restart: always
+    volumes:
+    - /home/duser/data:/data/pg  
+    networks:
+    - my-pg-network
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_PASSWORD=13572468QWER
+
+networks:
+  my-pg-network:
+    driver: bridge
